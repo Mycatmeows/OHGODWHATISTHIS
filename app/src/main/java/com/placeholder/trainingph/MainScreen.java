@@ -54,7 +54,8 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public MainScreen(){
-        BT = new BluetoothUtil();
+        System.out.print("MS");
+        BT = new BluetoothUtil(this);
     }
 
     //private void
