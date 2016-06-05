@@ -2,6 +2,7 @@
 byte IR_IN = A0;
 byte IR_EN = 2;
 byte PR_IN = A1;
+byte PR_EN = 9;
 byte BP_OUT= 10;
 byte State = 255;
 
@@ -19,12 +20,11 @@ void setup() {
 int Calibrate_Sensor(byte id){
   short avg =0;
   short _i=0;
-  int _i=0;
   byte target=_mapSensorToVar(id);  
   while (_i < 512){
     
-    _in = analogRead(target);    
-    avg = avg + _in;
+    _i = analogRead(target);    
+    avg = avg + _i;
     if(_i > 0){
       avg = avg / 2;
     }
@@ -35,9 +35,9 @@ int Calibrate_Sensor(byte id){
 }
 
 void loop() {
-	_newState = _pollChanges();
+	byte _newState = _pollChanges();
 	if (_newState != State){
-		State=_newState();
+		State=_newState;
 		_pinConfig();
 	}
 	_stateBasedAction();
@@ -56,7 +56,7 @@ byte _pollChanges(){
 byte _mapSensorToVar(byte id){
   byte t;
   if(id == PR_IN){
-	DigitalWrite(PR_EN, HIGH);
+	digitalWrite(PR_EN, HIGH);
     t=PR_IN;  
   }
   else if (id == IR_IN){
@@ -86,7 +86,7 @@ void _pinConfig(){
 }
 
 byte BTRead(){
-	return Serial.read()
+	return Serial.read();
 }
 
 void BTSend(byte data){
@@ -96,15 +96,15 @@ void BTSend(byte data){
 }
 
 boolean _isBTAvailable(){
-	return Serial.available()>0
+	return Serial.available()>0;
 }
 
 
 void _stateBasedAction(){
 	if(State==0){
 		if (_isBTAvailable()){
-			byte _in = BTRead()
-			if(_in()>0){
+			byte _in = BTRead();
+			if(_in>0){
 				State=1;
 				_pinConfig();
 				BTSend(State);
@@ -113,11 +113,11 @@ void _stateBasedAction(){
 		}
 	}
 	if(State==1){
-		_startCountDownAndStart();
+		_startCountDown();
 		
 	}
 	if(State==2){
-		_startAndCalcIR();
+		_startAndCalcIR(millis());
 		State=0;
 	}
 	
@@ -125,18 +125,18 @@ void _stateBasedAction(){
 
 void _beep(){
 	BP_OUT=1;
-	sleep(1);
+	delay(1);
 }
 
 void _startCountDown(){
 	_beep();
 	_beep();
 	_beep();	
-	BTSend(milis);
-	int _t = calcReactionTime(milis());
-	BTSend(t);	
+	BTSend(millis());
+	int _t = calcReactionTime(millis());
+	BTSend(_t);	
 	State=2;
-	pinConfig();
+	_pinConfig();
 }
 
 int calcReactionTime(unsigned long startTime){
@@ -144,14 +144,14 @@ int calcReactionTime(unsigned long startTime){
 	bool stop;
 	do{
 		stop = checkForSensor(PR_IN, 0);
-		interval = milis() - startTime;
-		while(_interval < 5000 && !stop)
-	}
-	return _interval	
+		_interval = millis() - startTime;
+  } while(_interval < 5000 && !stop);
+   
+	return _interval;	
 }
 
-void checkForSensor(int pin, int value){
-	return(analogReadToDigital(pin)==value)
+bool checkForSensor(int pin, int value){
+	return(analogReadToDigital(pin)==value);
 }
 
 bool analogReadToDigital(byte pin){
@@ -162,13 +162,14 @@ bool analogReadToDigital(byte pin){
 	return 0;
 }
 
-void _startAndCalcIR(){
+void _startAndCalcIR(unsigned long startTime){
+	int _interval=0;
+  bool stop;
 	do{
 		stop = checkForSensor(IR_IN, 0);
-		interval = milis() - startTime;
-		while(_interval < 5000 && !stop)
-	}
-	BTSend(_interval)	
+		_interval = millis() - startTime;
+	} while(_interval < 5000 && !stop);
+	BTSend(_interval)	;
 }
 
 
