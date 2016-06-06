@@ -27,6 +27,8 @@ public class BluetoothUtil  {
     private BluetoothSocket _socket;
     private List<BluetoothDevice> _devices;
     private final MainScreen _screen;
+	private SimpleThread reader;
+	private List<int, int> Reporter;
 
     // Create a BroadcastReceiver for ACTION_FOUND
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -43,12 +45,10 @@ public class BluetoothUtil  {
     };
     // Register the BroadcastReceiver
 
-
-
-
     public BluetoothUtil(MainScreen screen){
         _screen = screen;
         _adapter = BluetoothAdapter.getDefaultAdapter();
+		Reporter = new ArrayList<int, int>();
     }
 
     public boolean isConnected(){
@@ -82,23 +82,21 @@ public class BluetoothUtil  {
         try{
             _serverSocket = _adapter.listenUsingRfcommWithServiceRecord("BTConn", UUID.fromString("e632f568-f7de-4dbe-b351-25f8b993e4ca"));
             _socket = _serverSocket.accept();
-
+			reader = new SimpleThread(Reporter, _socket);
+			reader.ready();
         }
         catch (IOException e){
-
+			e.printStackTrace();
+			return false;
         }
-
-
         return true;
-    }
-
-    public void destroy(){
-        _adapter.disable();
     }
 
     public int read(){
         try{
-            return _socket.getInputStream().read();
+			int _in = _socket.getInputStream().read();
+			System.out.println("READ: "+_in);
+            return _in
         }
         catch(IOException e){
 
@@ -107,7 +105,8 @@ public class BluetoothUtil  {
     }
 
     public void write(byte data){
-
+		System.out.println("Wrote "+data);
+		_socket.write(data)
     }
 
 }
