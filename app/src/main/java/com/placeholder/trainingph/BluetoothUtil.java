@@ -9,12 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.View;
+import android.bluetooth.BluetoothSocket;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by joaop on 15/05/2016.
@@ -26,9 +24,9 @@ public class BluetoothUtil  {
     private BluetoothServerSocket _serverSocket;
     private BluetoothSocket _socket;
     private List<BluetoothDevice> _devices;
-    private final MainScreen _screen;
+    private MainScreen _screen;
 	private SimpleThread reader;
-	private List<int, int> Reporter;
+	private Map Reporter;
 
     // Create a BroadcastReceiver for ACTION_FOUND
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -48,7 +46,7 @@ public class BluetoothUtil  {
     public BluetoothUtil(MainScreen screen){
         _screen = screen;
         _adapter = BluetoothAdapter.getDefaultAdapter();
-		Reporter = new ArrayList<int, int>();
+		Reporter = new HashMap<java.lang.Integer, java.lang.Integer>();
     }
 
     public boolean isConnected(){
@@ -96,17 +94,23 @@ public class BluetoothUtil  {
         try{
 			int _in = _socket.getInputStream().read();
 			System.out.println("READ: "+_in);
-            return _in
+            return _in;
         }
         catch(IOException e){
-
+            System.out.println("Error reading from buffer");
         }
        return 0;
     }
 
     public void write(byte data){
 		System.out.println("Wrote "+data);
-		_socket.write(data)
+        try{
+            _socket.getOutputStream().write(data);
+        }
+        catch(IOException e){
+          System.out.println("Error writing to buffer");
+        }
+
     }
 
 }

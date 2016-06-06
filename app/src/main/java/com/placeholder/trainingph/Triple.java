@@ -6,17 +6,17 @@ import java.util.Objects;
  * Created by joaop on 15/05/2016.
  */
  
-public class Triple<E, E2>{
+public class Triple<E>{
 	
 	private E Value;
 	private boolean Consumed;
-	private E2 Next;
+	private Triple Next;
 	
 	public Triple(){
 		
 	}
 	
-	public <E, E1, E2> Triple(E vE, E2 Origin){
+	public Triple(E vE, Triple Origin){
 			this.Value = vE;
 			this.Consumed = false;
 			this.Next = null;
@@ -24,29 +24,29 @@ public class Triple<E, E2>{
 	
 	public void append(Triple t1){
 		if(t1.getNext()==null){
-			t1.Next(this);
+			t1.Next=this;
 		}
 		else{
-			append(t1.getNext())
+			append(t1.getNext());
 		}
 	}
 	
 	public E getValue(){
-		return value;
+		return Value;
 	}
 	
-	public E1 getIsConsumed(){		
+	public boolean getIsConsumed(){
 		return Consumed;
 	}
 	
-	public E2 getNext(){
+	public Triple getNext(){
 		return Next;
 	}
 	
 	public void consume(){
-		Consumed = false;
+		Consumed = true;
 		if(Next!=null){
-			this.Value=this.Next.Value;
+			this.Value=this.Next.getValue();
 			this.Consumed = this.Next.Consumed;
 			this.Next = this.Next.Next;
 		}

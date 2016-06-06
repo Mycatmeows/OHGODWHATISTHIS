@@ -6,7 +6,7 @@ import java.util.Objects;
  * Created by joaop on 15/05/2016.
  */
  
- public class Message(){
+ public class Message{
 	
 	private int Code;
 	private int Value;

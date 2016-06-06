@@ -1,5 +1,8 @@
 package com.placeholder.trainingph;
 
+import android.bluetooth.BluetoothSocket;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -8,34 +11,34 @@ import java.util.Objects;
 public class SimpleThread extends Thread {
 
     private Object stopCondition;
-	int _in;
-	private List writeTarget;
-	private Socket src;
+	private int _in;
+	private Map writeTarget;
+	private BluetoothSocket src;
 	private boolean run=false;
 	
-	Triple<int, boolean, Object> Q;
+	private Triple<java.lang.Integer> Q;
 	
-	public SimpleThread(List wrTarget, Socket source){
-		Q = new Triple<int, boolean, Object>();
+	SimpleThread(Map wrTarget, BluetoothSocket source){
+		Q = new Triple<Integer>();
 		this.writeTarget = wrTarget;
 		this.src = source;
 	}
 	
-	public void ready(){
+	void ready(){
 		this.start();		
 	}
 	
 	public void setIn(int _in){
-		Q.append(new Triple<int, boolean, Object>(_in, Q);
+		Q.append(new Triple<java.lang.Integer>(_in, Q));
 	}
 	
 	@Override
 	public void run(){
-			if(!Q.isConsumed()){
+			if(!Q.getIsConsumed()){
 			_in = Q.getValue();
-			Q.Consume();
+			Q.consume();
 			Message M = Message.fromIntValue(_in);
-			writeTarget.add(M.getValue, M.getCode)
+			writeTarget.put(M.getValue(), M.getCode());
 			}
 		}
 		
