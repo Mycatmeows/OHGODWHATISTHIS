@@ -2,6 +2,7 @@
 byte IR_IN = A0;
 byte IR_EN = 2;
 byte PR_IN = A1;
+byte PR_EN = A2;
 byte BP_OUT= 10;
 byte State = 255;
 
@@ -11,18 +12,36 @@ short PR_AVG = 0;
 
 void setup() {
   Serial.begin(9600);
+  //Set to config IR
+  State=2;
   _pinConfig();
+  //Calibrate_Sensor(IR_IN);
+  //Calibrate_Sensor(PR_IN);
+
   Calibrate_Sensor(IR_IN);
-  Calibrate_Sensor(PR_IN);
+  
+  State=0;
+  delayUntil(0xFF);
+
+  Serial.print("Received ack from mbl");
+  Serial.print("Waiting on start");
+
+  delayUntil(0xF1);
+
+   Serial.print("Received start command, starting ");
+
+  _startAndCalcIR(millis());
+  //TODO:Actually start
+  
+  
 }
 
 int Calibrate_Sensor(byte id){
   short avg =0;
   short _i=0;
-  int _i=0;
   byte target=_mapSensorToVar(id);  
   while (_i < 512){
-    
+    short _in;
     _in = analogRead(target);    
     avg = avg + _in;
     if(_i > 0){
@@ -35,9 +54,9 @@ int Calibrate_Sensor(byte id){
 }
 
 void loop() {
-	_newState = _pollChanges();
+	byte _newState = _pollChanges();
 	if (_newState != State){
-		State=_newState();
+		State=_newState;
 		_pinConfig();
 	}
 	_stateBasedAction();
@@ -56,7 +75,7 @@ byte _pollChanges(){
 byte _mapSensorToVar(byte id){
   byte t;
   if(id == PR_IN){
-	DigitalWrite(PR_EN, HIGH);
+	digitalWrite(PR_EN, HIGH);
     t=PR_IN;  
   }
   else if (id == IR_IN){
@@ -86,25 +105,25 @@ void _pinConfig(){
 }
 
 byte BTRead(){
-	return Serial.read()
+	return Serial.read();
 }
 
-void BTSend(byte data){
+void BTSend(unsigned long data){
 	if (Serial.availableForWrite()>0){
 		Serial.write(data);
 	}
 }
 
 boolean _isBTAvailable(){
-	return Serial.available()>0
+	return Serial.available()>0;
 }
 
 
 void _stateBasedAction(){
 	if(State==0){
 		if (_isBTAvailable()){
-			byte _in = BTRead()
-			if(_in()>0){
+			byte _in = BTRead();
+			if(_in>0){
 				State=1;
 				_pinConfig();
 				BTSend(State);
@@ -112,46 +131,41 @@ void _stateBasedAction(){
 			}
 		}
 	}
-	if(State==1){
-		_startCountDownAndStart();
-		
-	}
-	if(State==2){
-		_startAndCalcIR();
-		State=0;
-	}
+
 	
 }
 
 void _beep(){
 	BP_OUT=1;
-	sleep(1);
+	delay(1);
 }
 
 void _startCountDown(){
 	_beep();
 	_beep();
-	_beep();	
-	BTSend(milis);
-	int _t = calcReactionTime(milis());
-	BTSend(t);	
+	_beep();
+  unsigned long _m = millis();	
+	BTSend(_m);
+ _m = calcReactionTime(millis());
+	BTSend(_m);
+		
 	State=2;
-	pinConfig();
+	_pinConfig();
 }
 
 int calcReactionTime(unsigned long startTime){
 	int _interval=0;
-	bool stop;
+	bool stop=false;
 	do{
 		stop = checkForSensor(PR_IN, 0);
-		interval = milis() - startTime;
-		while(_interval < 5000 && !stop)
+		_interval = millis() - startTime;
 	}
-	return _interval	
+  while(_interval < 5000 && !stop);
+	return _interval;	
 }
 
-void checkForSensor(int pin, int value){
-	return(analogReadToDigital(pin)==value)
+boolean checkForSensor(int pin, int value){
+	return(analogReadToDigital(pin)==value);
 }
 
 bool analogReadToDigital(byte pin){
@@ -162,13 +176,27 @@ bool analogReadToDigital(byte pin){
 	return 0;
 }
 
-void _startAndCalcIR(){
+void _startAndCalcIR(unsigned long startTime){
+  int _interval;
+  bool stop;
 	do{
 		stop = checkForSensor(IR_IN, 0);
-		interval = milis() - startTime;
-		while(_interval < 5000 && !stop)
+		_interval = millis() - startTime;
 	}
-	BTSend(_interval)	
+  while(_interval < 5000 && !stop);
+  if(_interval > 5000){
+    Serial.print("Went to timeout");
+  }
+	BTSend(_interval);	
+}
+
+bool delayUntil(byte trgt){
+  int _msg = 0x00;
+  while(_msg!=trgt){    
+    delay(10);
+    _msg = BTRead();
+  }
+  return true;
 }
 
 
