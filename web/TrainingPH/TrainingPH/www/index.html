@@ -1,0 +1,33 @@
+<html ng-app="index">
+
+    <head>
+        <title>
+            Hue hue hue
+        </title>
+        
+        <link rel="stylesheet" type="text/css" href="bootstrap.min.css">        
+                
+    </head>
+    
+    <body ng-controller="indexController as idx">
+        {{idx.dbg}}
+        {{1 + 1}}
+        <ul class="list-group" ng-repeat="user in idx.Users">
+            <li class="list-group-item">
+                Name={{user.name}}            
+            </li>
+            <li class="list-group-item">
+                Password={{user.password_hash}}
+            </li>
+        
+        </ul>
+    
+        
+        
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>    
+        
+    </body>
+
+
+</html>

@@ -15,7 +15,7 @@ import java.util.Objects;
 	
 	public Message(int Value, int Code){
 			this.Code = Code;
-			this.Value = Value
+			this.Value = Value;
 	}
 	
 	public static Message fromIntValue(int val){

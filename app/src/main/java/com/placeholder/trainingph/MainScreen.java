@@ -28,7 +28,7 @@ public class MainScreen extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        new MainScreen();
+        new MainActivity();
     }
 
     @Override
@@ -53,20 +53,4 @@ public class MainScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public MainScreen(){
-        System.out.print("MS");
-        BT = new BluetoothUtil(this);
-    }
-
-    //private void
-
-    public boolean isBTAvailable(){
-
-        return true;
-    }
-
-    public boolean sendStartCommand(View v){
-        BT.connect();
-        return false;
-    }
 }

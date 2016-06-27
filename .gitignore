@@ -6,3 +6,7 @@
 .DS_Store
 /build
 /captures
+/app/src/main/gen
+/out
+/web/TrainingPH/__pycache__
+/web/TrainingPH/migrations
