@@ -19,7 +19,7 @@ public class SimpleThread extends Thread {
 	private Triple<java.lang.Integer> Q;
 	
 	SimpleThread(Map wrTarget, BluetoothSocket source){
-		Q = new Triple<Integer>();
+		//Q = new Triple<Integer>()
 		this.writeTarget = wrTarget;
 		this.src = source;
 	}
@@ -40,10 +40,5 @@ public class SimpleThread extends Thread {
 			Message M = Message.fromIntValue(_in);
 			writeTarget.put(M.getValue(), M.getCode());
 			}
-		}
-		
 	}
-
-
-
 }

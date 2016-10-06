@@ -10,18 +10,14 @@ public class Triple<E>{
 	
 	private E Value;
 	private boolean Consumed;
-	private Triple Next;
-	
-	public Triple(){
-		
-	}
+	private Triple<E> Next;
 	
 	public Triple(E vE, Triple Origin){
 			this.Value = vE;
 			this.Consumed = false;
 			this.Next = null;
 	}
-	
+
 	public void append(Triple t1){
 		if(t1.getNext()==null){
 			t1.Next=this;
@@ -44,12 +40,7 @@ public class Triple<E>{
 	}
 	
 	public void consume(){
-		Consumed = true;
-		if(Next!=null){
-			this.Value=this.Next.getValue();
-			this.Consumed = this.Next.Consumed;
-			this.Next = this.Next.Next;
-		}
+        Consumed = true;
 	}
 	
 	private void setNext(Triple t){

@@ -8,10 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainScreen extends AppCompatActivity {
 
-    private BluetoothUtil BT;
+    private MainActivity mainActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +30,18 @@ public class MainScreen extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        new MainActivity();
+        mainActivity = new MainActivity();
     }
+
+    public void initBluetooth(View v){
+        mainActivity.initBluetooth(v);
+}
+
+    public void initConnection(View v){
+        mainActivity.initConnection(v);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

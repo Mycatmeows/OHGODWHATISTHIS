@@ -16,27 +16,35 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by joaop on 15/05/2016.
- */
 public class BluetoothUtil{
 
-    private BluetoothAdapter _adapter;
-    private BluetoothDevice _target;
+    private static BluetoothAdapter _adapter;
+    private static BluetoothDevice _target;
     private BluetoothServerSocket _serverSocket;
     private BluetoothSocket _socket;
     private List<BluetoothDevice> _devices;
 	private SimpleThread reader;
 	private Map Reporter;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(BluetoothDevice.ACTION_FOUND)){
+                _target = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                _adapter.cancelDiscovery();
+                new BTConectionThread(_target);
+            }
+        }
+    };
 
-    public void on(Activity currentActivity){
+    public static void TurnOn(Context ctx){
         if(!_adapter.isEnabled()){
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            currentActivity.startActivityForResult(turnOn,0x01);
-            Toast.makeText(currentActivity.getApplicationContext(), "Bluetooth enabled.", Toast.LENGTH_SHORT).show();
+            turnOn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(turnOn);
+            Toast.makeText(ctx, "Bluetooth enable.", Toast.LENGTH_SHORT).show();
         }
         else
-            Toast.makeText(currentActivity.getApplicationContext(),"Already on", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,"Already on", Toast.LENGTH_SHORT).show();
     }
 
     public void off(Activity currentActivity){
@@ -44,53 +52,38 @@ public class BluetoothUtil{
         Toast.makeText(currentActivity.getApplicationContext(), "Turning bluetooth off", Toast.LENGTH_SHORT).show();
     }
 
-    public void makeVisible(Activity currentActivity){
+    public void makeVisible(Context ctx){
         Intent makeVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        makeVisible.putExtra()
-        currentActivity.startActivityForResult(makeVisible, 0x01);
+        ctx.startActivity(makeVisible);
     }
 
-    public void startServer(){
-        try{
-            _serverSocket = _adapter.listenUsingRfcommWithServiceRecord("BTConn", UUID.fromString(_adapter.getName()));
-            _socket = _serverSocket.accept();
-            reader = new SimpleThread(Reporter, _socket);
-            reader.ready();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean startConnection(Context ctx){
+        _adapter.startDiscovery();
+        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        ctx.registerReceiver(broadcastReceiver, intentFilter);
         return true;
     }
 
+    public void sendStartCommand(){
+        if(_target!=null){
+            DialogThreadManager DTM = new DialogThreadManager();
+            DTM.addThread(new DialogThread(_target));
 
-
-    // Create a BroadcastReceiver for ACTION_FOUND
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // Add the name and address to an array adapter to show in a ListView
-                //_adapter.add(device.getName() + "\n" + device.getAddress());
-            }
         }
-    };
-    // Register the BroadcastReceiver
+    }
+
+
+
+
 
     public BluetoothUtil(){
         _adapter = BluetoothAdapter.getDefaultAdapter();
-		Reporter = new HashMap<java.lang.Integer, java.lang.Integer>();
+		Reporter = new HashMap<java.lang.Integer, java.lang.String>();
     }
 
     public boolean isConnected(){
         return _devices.get(0) != null;
     }
-
-
 
     public int read(){
         try{
@@ -114,6 +107,5 @@ public class BluetoothUtil{
         }
 
     }
-
 }
 
