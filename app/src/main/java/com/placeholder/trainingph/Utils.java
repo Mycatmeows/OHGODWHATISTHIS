@@ -1,5 +1,7 @@
 package com.placeholder.trainingph;
 
+import android.util.SparseIntArray;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,7 +17,14 @@ public class Utils {
 
     }
 
+    public static void sendGenericErrorMessage(){
+        System.out.println("SOMETHING BAD HAPPENED :C");
+    }
 
+    public static String decodeBluetoothMessage(int code){
+
+        return "";
+    }
 
 
 

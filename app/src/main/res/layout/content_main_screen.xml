@@ -12,23 +12,6 @@
     tools:context="com.placeholder.trainingph.MainScreen"
     tools:showIn="@layout/activity_main_screen">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="aaa"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reaction time"
-        android:id="@+id/textView2"
-        android:layout_alignTop="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +21,10 @@
         android:layout_marginBottom="57dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="initConnection" />
+        android:onClick="initConnection"
+        android:visibility="visible" />
+
+
 
     <Button
         android:layout_width="wrap_content"
@@ -49,4 +35,80 @@
         android:layout_centerHorizontal="true"
         android:elevation="0dp"
         android:onClick="initBluetooth" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/TEXT"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reaction time"
+            android:id="@+id/RT_TXT"
+            android:layout_alignTop="@+id/RT_VAL"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/RT_VAL"
+            android:text="0"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textAlignment="textEnd"
+            android:layout_width="85dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/LT_VAL"
+            android:text="0"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:textAlignment="textEnd"
+            android:layout_width="85dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Partial Time"
+            android:id="@+id/PT_TXT"
+            android:layout_alignTop="@+id/RT_VAL"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_row="2"
+            android:layout_column="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lap time"
+            android:id="@+id/LT_TXT"
+            android:layout_alignTop="@+id/RT_VAL"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_row="1"
+            android:layout_column="0" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/PT_VAL"
+            android:text="0"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:textAlignment="textEnd"
+            android:layout_width="85dp"
+            android:selectAllOnFocus="false" />
+
+    </GridLayout>
 </RelativeLayout>

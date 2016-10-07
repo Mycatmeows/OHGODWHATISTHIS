@@ -33,14 +33,18 @@ public class MainScreen extends AppCompatActivity {
         mainActivity = new MainActivity();
     }
 
-    public void initBluetooth(View v){
+    public void initBluetooth(View v) throws BluetoothException{
         mainActivity.initBluetooth(v);
 }
 
     public void initConnection(View v){
-        mainActivity.initConnection(v);
+        if(mainActivity.canStart()) {
+            mainActivity.sendStartCommand(v);
+        }
+        else{
+            Toast.makeText(v.getContext(),"Please make a connection first!",Toast.LENGTH_SHORT).show();
+        }
     }
-
 
 
     @Override
@@ -63,6 +67,11 @@ public class MainScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean shouldShowText(View v){
+        if(mainActivity==null)return false;
+        return mainActivity.hasStarted();
     }
 
 }

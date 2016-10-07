@@ -4,24 +4,17 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 import java.io.IOException;
-import java.util.UUID;
 
-public class BTConectionThread implements Runnable {
+public class BTConnectionThread implements Runnable {
 
-    private BluetoothServerSocket serverSocket;
     private BluetoothSocket socket;
-    private BluetoothAdapter adapter;
     private BluetoothDevice target;
     private boolean isConnected=false;
 
 
-    public  BTConectionThread(BluetoothDevice device){
+    public  BTConnectionThread(BluetoothDevice device){
         target = device;
         this.run();
     }
@@ -53,4 +46,13 @@ public class BTConectionThread implements Runnable {
     public boolean isConnected(){
         return isConnected;
     }
+
+    public BluetoothDevice getDevice(){
+        return target;
+    }
+
+    public boolean isBonded(){
+        return target.getBondState()==BluetoothDevice.BOND_BONDED;
+    }
+
 }
