@@ -1,28 +1,32 @@
 package com.placeholder.trainingph;
 
-import android.util.SparseIntArray;
 
+import android.widget.Toast;
+
+import java.io.Console;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by jmontez on 06-10-2016.
- */
 
 public class Utils {
+
 
     public synchronized void interruptMeAfter(Thread T, final int interval){
         Timer time = new Timer();
         final long startTime = System.currentTimeMillis();
-
+        time.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //T.interrupt();
+            }
+        },interval);
     }
 
-    public static void sendGenericErrorMessage(){
-        System.out.println("SOMETHING BAD HAPPENED :C");
+    public static void sendGenericErrorMessage(String prefix){
+        Toast.makeText(Constants.DEFAULT_CONTEXT,"Something bad happened @ "+prefix, Toast.LENGTH_LONG).show();
     }
 
-    public static String decodeBluetoothMessage(int code){
-
+    public static String BluetoothMessageCodeToColumn(int code){
         return "";
     }
 

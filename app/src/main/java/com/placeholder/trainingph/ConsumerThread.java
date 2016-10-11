@@ -14,7 +14,7 @@ public class ConsumerThread implements Runnable {
         while(threadManager.peek()!=null) {
             Message current = threadManager.poll();
             if(current.getOrigin() == BluetoothUtil.DEVICE_NAME){//Intended for this device
-                String Column = Utils.decodeBluetoothMessage(current.getCode());
+                String Column = Utils.BluetoothMessageCodeToColumn(current.getCode());
                 threadManager.updateValue(Column, current.getCode());
             }
         }

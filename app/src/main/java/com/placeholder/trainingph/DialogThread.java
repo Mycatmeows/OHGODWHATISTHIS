@@ -26,12 +26,12 @@ public class DialogThread<E> implements Runnable{
             InputStream Input = socket.getInputStream();
             int val = Input.read();
             while(val!=-1){
-                T.append(new Triple<java.lang.Integer>(val,T));
+                T.append(new Triple<Integer>(val,T));
                 val=Input.read();
             }
         }
         catch (IOException e){
-            Utils.sendGenericErrorMessage();
+            Utils.sendGenericErrorMessage("DialogThread.run()");
         }
 
     }
@@ -45,6 +45,10 @@ public class DialogThread<E> implements Runnable{
 
     public Triple getCurrent(){
         return T;
+    }
+
+    public boolean hasNext(){
+        return T.hasNext();
     }
 
     public BluetoothSocket getSocket(){

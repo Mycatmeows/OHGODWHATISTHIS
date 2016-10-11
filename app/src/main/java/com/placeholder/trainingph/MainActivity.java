@@ -17,23 +17,16 @@ public class MainActivity extends Activity {
 
     private BluetoothUtil bluetoothUtil;
     private boolean BT_ON=false;
-    private ThreadManager threadManager = new ThreadManager<Object>();
+    private ThreadManager threadManager = new ThreadManager<>();
     private HashMap<String, Integer> valueMap;
 
 
     public MainActivity() {
-        try {
-            bluetoothUtil = new BluetoothUtil();
-        }
-        catch (BluetoothException e){
-            //do Nothing
-        }
-
-
+        bluetoothUtil = new BluetoothUtil();
     }
 
     public void initBluetooth(View v) throws BluetoothException{
-
+        Constants.DEFAULT_CONTEXT = v.getContext();
         bluetoothUtil.TurnOn(v.getContext());
         bluetoothUtil.makeVisible(v.getContext());
         bluetoothUtil.startConnection(v.getContext());

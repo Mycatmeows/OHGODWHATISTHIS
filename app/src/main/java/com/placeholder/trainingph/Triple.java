@@ -1,12 +1,10 @@
 package com.placeholder.trainingph;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-/**
- * Created by joaop on 15/05/2016.
- */
  
-public class Triple<E>{
+public class Triple<E> {
 	
 	private E Value;
 	private boolean Consumed;
@@ -46,5 +44,10 @@ public class Triple<E>{
 	private void setNext(Triple t){
 		this.Next = t;
 	}
-	
+
+	public boolean hasNext(){
+		return Next!=null;
+	}
+
+
 }

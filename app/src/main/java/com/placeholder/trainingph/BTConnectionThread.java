@@ -9,37 +9,43 @@ import java.io.IOException;
 
 public class BTConnectionThread implements Runnable {
 
-    private BluetoothSocket socket;
+    private BluetoothServerSocket socket;
     private BluetoothDevice target;
     private boolean isConnected=false;
+    private BluetoothAdapter adapter;
 
 
-    public  BTConnectionThread(BluetoothDevice device){
-        target = device;
-        this.run();
+    public  BTConnectionThread(BluetoothAdapter adapter){
+        this.adapter = adapter;
+        BluetoothServerSocket sck = null;
+        try{
+            sck = adapter.listenUsingInsecureRfcommWithServiceRecord(adapter.getName(),Constants.APP_UUID);
+        }
+        catch (IOException|NullPointerException e){
+            Utils.sendGenericErrorMessage("BTConnectionThread() : "+e.getMessage());
+        }
+        if(sck != null){
+            socket=sck;
+            this.run();
+        }
+
     }
 
     @Override
     public void run() {
-        BluetoothSocket sck = null;
         isConnected = false;
         while(!isConnected){
-            try{
-                sck = target.createInsecureRfcommSocketToServiceRecord(Constants.APP_UUID);
-                sck.connect();
-                isConnected=true;
-            }
-            catch (IOException e){
-                System.out.println("SOMETHING BAD HAPPENED D:");
-            }
-            catch(NullPointerException e){
-                System.out.println("SOMETHING BAD HAPPENED D:");
-            }
+          try{
+              socket.accept();
+          }
+          catch (IOException e){
+              Utils.sendGenericErrorMessage("BTConnectionThread.run() : "+e.getMessage());
+          }
         }
-        socket=sck;
+        isConnected=true;
     }
 
-    public BluetoothSocket getSocket(){
+    public BluetoothServerSocket getSocket(){
         return socket;
     }
 
