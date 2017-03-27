@@ -4,6 +4,8 @@ package com.placeholder.trainingph;
 import android.widget.Toast;
 
 import java.io.Console;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,6 +32,9 @@ public class Utils {
         return "";
     }
 
+    public static Date getExtractionDate(){
+        return Calendar.getInstance().getTime();
+    }
 
 
 
