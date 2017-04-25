@@ -8,6 +8,8 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 import android.R;
 
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +38,18 @@ public class MainActivity extends Activity {
     public void sendStartCommand(View v){
         threadManager.addThread(bluetoothUtil.sendStartCommand());
     }
+
+    public void testDatabaseUtil(){
+        try{
+            DBHelper dataBase = new DBHelper();
+            dataBase.addReactionTime(0,0, Calendar.getInstance().getTime(),0.420);
+        }
+        catch(SQLException e){
+            Utils.sendGenericErrorMessage(e+" DATABASE INIT");
+        }
+    }
+
+
 
 
 

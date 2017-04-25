@@ -36,6 +36,16 @@
         android:elevation="0dp"
         android:onClick="initBluetooth" />
 
+    <Button
+        android:text="Test DB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TestDB"
+        android:onClick="testDatabaseUtil (MainScreen)"
+        android:layout_above="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

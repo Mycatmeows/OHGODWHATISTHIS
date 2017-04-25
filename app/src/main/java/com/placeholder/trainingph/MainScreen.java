@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+import java.util.Calendar;
+
 public class MainScreen extends AppCompatActivity {
 
     private MainActivity mainActivity;
@@ -21,15 +24,6 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mainActivity = new MainActivity();
     }
 
@@ -67,6 +61,10 @@ public class MainScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void testDatabaseUtil(View v){
+       // mainActivity.testDatabaseUtil();
     }
 
     public boolean shouldShowText(View v){

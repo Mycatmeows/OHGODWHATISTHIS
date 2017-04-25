@@ -1,0 +1,52 @@
+CREATE TABLE FACT_USER
+(
+	id int not null IDENTITY PRIMARY KEY,
+	name VARCHAR(50),
+	password VARCHAR (256),
+	ts_creation TIMESTAMP NOT NULL,
+	update_user VARCHAR (20)
+)
+
+CREATE TABLE DIM_RUN
+(
+	INFO_DT DATE NOT NULL,
+	id int IDENTITY NOT NULL PRIMARY KEY,
+	id_user int REFERENCES FACT_USER(id),
+	total_time float,
+	start_dt DATETIME,
+	end_dt DATETIME
+)
+
+CREATE TABLE DIM_REACTION
+(
+	INFO_DT DATE NOT NULL,
+	id_user int references FACT_USER(id),
+	id_run  int references DIM_RUN(id),
+	reaction_time float
+)
+CREATE TABLE FACT_USER
+(
+	id int not null IDENTITY PRIMARY KEY,
+	name VARCHAR(50),
+	password VARCHAR (256),
+	ts_creation TIMESTAMP NOT NULL,
+	update_user VARCHAR (20)
+)
+
+CREATE TABLE DIM_RUN
+(
+	INFO_DT DATE NOT NULL,
+	id int IDENTITY NOT NULL PRIMARY KEY,
+	id_user int REFERENCES FACT_USER(id),
+	total_time float,
+	start_dt DATETIME,
+	end_dt DATETIME
+)
+
+CREATE TABLE DIM_REACTION
+(
+	INFO_DT DATE NOT NULL,
+	id_user int references FACT_USER(id),
+	id_run  int references DIM_RUN(id),
+	reaction_time float
+)
