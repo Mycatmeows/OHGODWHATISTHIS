@@ -1,52 +1,73 @@
-CREATE TABLE FACT_USER
+CREATE TABLE STG_USER
 (
-	id int not null IDENTITY PRIMARY KEY,
+	id int not null AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(50),
 	password VARCHAR (256),
 	ts_creation TIMESTAMP NOT NULL,
 	update_user VARCHAR (20)
-)
+);
 
-CREATE TABLE DIM_RUN
+CREATE TABLE STG_REACTION
 (
 	INFO_DT DATE NOT NULL,
-	id int IDENTITY NOT NULL PRIMARY KEY,
+	id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	id_user int references FACT_USER(id),
+	id_run  int references DIM_RUN(id),
+	reaction_time float
+);
+
+CREATE TABLE STG_RUN
+(
+	info_dt DATE NOT NULL,
+	id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	id_user int REFERENCES FACT_USER(id),
 	total_time float,
 	start_dt DATETIME,
 	end_dt DATETIME
-)
+);
 
-CREATE TABLE DIM_REACTION
+CREATE TABLE STG_PARTIAL
 (
-	INFO_DT DATE NOT NULL,
-	id_user int references FACT_USER(id),
-	id_run  int references DIM_RUN(id),
-	reaction_time float
-)
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  id_run  int references DIM_RUN(id),
+  partial_time float
+);
+
+--DW
+
 CREATE TABLE FACT_USER
 (
-	id int not null IDENTITY PRIMARY KEY,
+	id int not null AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(50),
 	password VARCHAR (256),
 	ts_creation TIMESTAMP NOT NULL,
 	update_user VARCHAR (20)
-)
+);
 
 CREATE TABLE DIM_RUN
 (
-	INFO_DT DATE NOT NULL,
-	id int IDENTITY NOT NULL PRIMARY KEY,
+	info_dt DATE NOT NULL,
+	id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	id_user int REFERENCES FACT_USER(id),
 	total_time float,
 	start_dt DATETIME,
 	end_dt DATETIME
-)
+);
 
 CREATE TABLE DIM_REACTION
 (
-	INFO_DT DATE NOT NULL,
+	id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	info_dt DATE NOT NULL,
 	id_user int references FACT_USER(id),
 	id_run  int references DIM_RUN(id),
 	reaction_time float
-)
+);
+
+CREATE TABLE DIM_PARTIAL
+(
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  id_run  int references DIM_RUN(id),
+  partial_time float
+);
+
+
